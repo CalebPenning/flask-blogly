@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% block head %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% block title %}<title>All Users</title>{% endblock %}
+    {% endblock %}
+</head>
+<body>
+    {% block top_text %}<h2>Blogly</h2>{% endblock %}
+    {% block content %}
+    <ul>
+        {% for user in users %}
+        <li><a href="/users/{{user.id}}">{{user.first_name}} {{user.last_name}}</a></li>
+        {% endfor %}
+    </ul>
+    <button><a href="/users/new">Add User</a></button>
+    {% endblock %}
+</body>
+</html>
