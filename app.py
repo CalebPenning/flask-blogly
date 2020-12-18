@@ -51,9 +51,25 @@ def show_edit_page(user_id):
     return render_template('edit.html', user=user)
 
 @app.route("/users/<int:user_id>/edit", methods=["POST"])
-def edit_user_page():
+def edit_user_page(user_id):
+    user = User.query.get_or_404(user_id) 
+    user.first_name = request.form['first-name']
+    user.last_name = request.form['last-name']
+    user.img_url = request.form['img-url']
     
+    db.session.add(user)
+    db.session.commit()
+    
+    return redirect(f'/users/{user.id}') 
 
+@app.route("/users/<int:user_id>/delete")
+def ask_permission(user_id):
+    user = User.query.get_or_404(user_id)
+    return render_template('permissions.html', user=user)
+    
 @app.route("/users/<int:user_id>/delete", methods=["POST"])
-def delete_user_instance():
-    pass
+def delete_user_instance(user_id):
+    User.query.filter_by(id=user_id).delete()
+    db.session.commit() 
+    
+    return redirect('/users')

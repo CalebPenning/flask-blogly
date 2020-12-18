@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block head %}
+{% block title %}<title>Delete User</title> {% endblock %}
+{% endblock %}
+
+{% block content %}
+<form action="/users/{{user.id}}/delete" method="POST">
+<button>Delete User</button> <button><a href="/users/{{user.id}}">Go back</a></button>
+</form>
+{% endblock %}
