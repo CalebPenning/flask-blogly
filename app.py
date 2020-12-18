@@ -46,12 +46,13 @@ def render_user_info(user_id):
     return render_template('details.html', user=user)
     
 @app.route("/users/<int:user_id>/edit")
-def show_edit_page():
-    pass
+def show_edit_page(user_id):
+    user = User.query.get_or_404(user_id)
+    return render_template('edit.html', user=user)
 
 @app.route("/users/<int:user_id>/edit", methods=["POST"])
 def edit_user_page():
-    pass
+    
 
 @app.route("/users/<int:user_id>/delete", methods=["POST"])
 def delete_user_instance():
