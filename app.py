@@ -2,11 +2,11 @@
 
 from flask import Flask, render_template, request, flash, session, redirect
 from flask_debugtoolbar import DebugToolbarExtension
-from models import db, connect_db, User
+from models import db, connect_db, User, Post
 
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///blogly'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///blogly_db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = True
 app.config['SECRET_KEY'] = "warriors"
@@ -18,7 +18,14 @@ db.create_all()
 
 @app.route("/")
 def render_homepage():
-    return redirect('/users')
+    posts = Post.query.order_by(Post.created_at.desc()).limit(5).all()
+    return render_template("posts_homepage.html", posts=posts)
+
+@app.errorhandler(404)
+def page_not_found(err):
+    """Show 404 Page"""
+    
+    return render_template('404.html'), 404
 
 @app.route("/users")
 def render_user_list():
@@ -74,3 +81,12 @@ def delete_user_instance(user_id):
     db.session.commit() 
     
     return redirect('/users')
+
+@app.route("/users/<int:user_id>/posts/new")
+def new_post_form(user_id):
+    user = User.query.get_or_404(user_id)
+    return render_template('new_post.html', user=user)
+
+@app.route("/users/<int:user_id>/posts/new", methods=["POST"])
+def send_post_and_redirect(user_id):
+    pass

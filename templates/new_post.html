@@ -5,11 +5,11 @@
 {% block content %}
 {% block top_text %}{% endblock %}
     <h3>
-        Create New User:
+        Create New Post for {user.name}:
     </h3>
-    <form action="/users/new" method="POST">
-    <input type="text" name="first-name" placeholder="First Name">
-    <input type="text" name="last-name" placeholder="Last Name">
+    <form action="/users/{{user.id}}/posts/new" method="POST">
+    <input type="text" name="Title" placeholder="Title">
+    <input type="text" name="content" placeholder="Write your post!">
     <input type="text" name="img-url" placeholder="Avatar Url">
     <button>Submit User</button>
     </form>
