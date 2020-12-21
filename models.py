@@ -76,4 +76,7 @@ class Post(db.Model):
                         db.ForeignKey('users.id'),
                         nullable=False)
     
+    @property
+    def nice_date(self):
+        return self.created_at.strftime("%a %b %-d %Y, %-:%M %p")
     

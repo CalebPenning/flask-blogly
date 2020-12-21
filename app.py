@@ -89,4 +89,18 @@ def new_post_form(user_id):
 
 @app.route("/users/<int:user_id>/posts/new", methods=["POST"])
 def send_post_and_redirect(user_id):
-    pass
+    user = User.query.get_or_404(user_id)
+    new_post = Post(title=request.form['title'],
+                    content=request.form['content'],user=user)
+    
+    db.session.add(new_post)
+    db.session.commit()
+    flash(f"'{new_post.title}' was successfully added.")
+    
+    return redirect(f"/users/{user_id}")
+
+
+@app.route('posts/<int:post_id>')
+def show_post_by_id(post_id):
+    post = Post.query.get_or_404(post_id)
+    return render_template('show_post_by_id.html',post=post)
