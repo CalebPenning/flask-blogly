@@ -100,7 +100,18 @@ def send_post_and_redirect(user_id):
     return redirect(f"/users/{user_id}")
 
 
-@app.route('posts/<int:post_id>')
+@app.route('/posts/<int:post_id>')
 def show_post_by_id(post_id):
     post = Post.query.get_or_404(post_id)
-    return render_template('show_post_by_id.html',post=post)
+    return render_template('show_post_by_id.html', post=post)
+
+@app.route('/posts/<int:post_id>/edit')
+def show_edit_form(post_id):
+    post = Post.query.get_or_404(post_id)
+    
+    return render_template('edit_post.html', post=post, user=post.user)
+
+
+@app.route('/posts/<int:post_id>/edit', methods=['POST'])
+def edit_post(post_id):
+    pass

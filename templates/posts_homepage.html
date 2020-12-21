@@ -1,12 +1,18 @@
 {% extends 'base.html' %}
-
-{% block title %}{{ post.title }}{% endblock %}
-
+{% block head %}
+{% block title %}<title>Posts</title>{% endblock %}
+{% endblock %}
+{% block top_text %} {% endblock %}
 {% block content %}
-    <h3>{{ post.title }}</h3>
+<h1>Recent Posts</h1>
 
-    <p>{{ post.content }}</p>
-    <p><i>By {{post.user.full_name}} 
-        on {{ post.nice_date }}
-    </i></p>
+{% for post in posts %}
+<h3 class="mt-4">
+    <a href="/posts/{{post.id}}">{{ post.title }}</a>
+</h3>
+<p>{{ post.content }}</p>
+<p>
+    <small>By {{post.user.first_name}}</small>
+</p>
+{% endfor %}
 {% endblock %}
