@@ -3,7 +3,7 @@
 from flask import Flask, render_template, request, flash, session, redirect
 from flask_debugtoolbar import DebugToolbarExtension
 from models import db, connect_db, User, Post
-
+import datetime
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///blogly_db'
@@ -82,6 +82,8 @@ def delete_user_instance(user_id):
     
     return redirect('/users')
 
+
+
 @app.route("/users/<int:user_id>/posts/new")
 def new_post_form(user_id):
     user = User.query.get_or_404(user_id)
@@ -99,6 +101,9 @@ def send_post_and_redirect(user_id):
     
     return redirect(f"/users/{user_id}")
 
+@app.route("/posts")
+def direct_home():
+    return redirect('/')
 
 @app.route('/posts/<int:post_id>')
 def show_post_by_id(post_id):
@@ -114,4 +119,24 @@ def show_edit_form(post_id):
 
 @app.route('/posts/<int:post_id>/edit', methods=['POST'])
 def edit_post(post_id):
-    pass
+    post = Post.query.get_or_404(post_id)
+    post.title = request.form['title']
+    post.content = request.form['content']
+    
+    db.session.add(post)
+    db.session.commit()
+    
+    flash(f"'{post.title}' was successfully edited.")
+    
+    return redirect(f'/posts/{post.id}')
+
+@app.route('/posts/<int:post_id>/delete', methods=['POST'])
+def delete_post(post_id):
+    post = Post.query.get_or_404(post_id)
+    
+    db.session.delete(post)
+    db.session.commit()
+    
+    flash("Post deleted, redirecting...")
+    
+    return redirect('/')
