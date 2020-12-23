@@ -12,10 +12,7 @@
 </h3>
 <p>{{ post.content }}</p>
 <p>
-    <small>By {{post.user.first_name}}</small>
+    <small>By <a href="/users/{{post.user.id}}">{{post.user.first_name}}</a></small>
 </p>
 {% endfor %}
-<div class="">
-<button class="btn btn-primary"><a href="/" style="color:white">Add Post</a></button>
-</div>
 {% endblock %}

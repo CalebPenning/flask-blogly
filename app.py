@@ -1,9 +1,16 @@
 """Blogly application."""
-
+import sentry_sdk
+from sentry_sdk.integrations.flask import FlaskIntegration
 from flask import Flask, render_template, request, flash, session, redirect
 from flask_debugtoolbar import DebugToolbarExtension
 from models import db, connect_db, User, Post
 import datetime
+
+sentry_sdk.init(
+    dsn="https://b52737761d124037a43da4e82cd252d3@o494928.ingest.sentry.io/5566779",
+    integrations=[FlaskIntegration()],
+    traces_sample_rate=1.0
+)
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///blogly_db'
@@ -15,6 +22,10 @@ debug = DebugToolbarExtension(app)
 
 connect_db(app)
 db.create_all()
+
+@app.route('/debug-sentry')
+def trigger_error():
+    return 1 / 0
 
 @app.route("/")
 def render_homepage():
@@ -108,7 +119,8 @@ def direct_home():
 @app.route('/posts/<int:post_id>')
 def show_post_by_id(post_id):
     post = Post.query.get_or_404(post_id)
-    return render_template('show_post_by_id.html', post=post)
+    user_id = post.user_id
+    return render_template('show_post_by_id.html', post=post, user_id=user_id)
 
 @app.route('/posts/<int:post_id>/edit')
 def show_edit_form(post_id):

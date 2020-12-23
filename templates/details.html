@@ -4,9 +4,10 @@
 {% endblock %}
 
 {% block content %}
-<div class="container mt-5" style="background-color: #aaa;"></div>
+<div class="container mt-5" style="background-color: #aaa;">
     {% with messages = get_flashed_messages() %}
     <h2>{{user.first_name}} {{user.last_name}} Details</h2>
+    <img src={{user.img_url}} class="img-thumbnail rounded float-left" alt="A picture of {{user.first_name}} {{user.last_name}}" height=250 width=250>
     <small>{% if messages %}
             {% for message in messages %}
             {{message}}
@@ -16,10 +17,10 @@
     {% endwith %}
     <button class="btn btn-info"><a href=/users/{{user.id}}/edit>Edit User</a></button>
     <button class="btn btn-danger"><a href="/users/{{user.id}}/delete">Delete User</a></button>
+    <button class="btn btn-success"><a href="/users/{{user.id}}/posts/new">Add Post</a></button>
     <ul>
         <li>ID: {{user.id}}</li>
         <li>Name: {{user.first_name}} {{user.last_name}}</li>
-        <img src={{user.img_url}} class="img-thumbnail rounded float-left" alt="A picture of {{user.first_name}} {{user.last_name}}" height=250 width=250>
     </ul>
     <br>
     <a href="/">Go back</a>
